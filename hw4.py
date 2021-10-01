@@ -29,10 +29,9 @@ class Customer:
     # Submit_order takes a cashier, a stall and an amount as parameters, 
     # it deducts the amount from the customer’s wallet and calls the receive_payment method on the cashier object
     
-    def submit_order(self, cashier, stall, amount): 
-        amount *= 7
+    def submit_order(self, cashier, stall, amount):        
         self.wallet -= amount
-        cashier.recieve_payment(amount)
+        cashier.recieve_payment(self, stall, amount)
         return amount 
 
     # The __str__ method prints the customer's information.    
@@ -67,7 +66,7 @@ class Cashier:
 	# Function returns cost of the order, using compute_cost method
     def place_order(self, stall, item, quantity):
         stall.process_order(item, quantity)
-        return stall.compute_cost(quantity) 
+        return Stall.compute_cost(quantity) 
     
     # string function.
     def __str__(self):
@@ -84,8 +83,8 @@ class Stall:
 
     def process_order(self, name1, quan):
         if name1 in self.inventory.keys():
+            self.earnings += (name1 * quan)
             self.inventory[name1] -=quan
-            
         
     def has_item(self, name, quan):
      if self.inventory[name] >= quan:
@@ -100,11 +99,11 @@ class Stall:
             self.inventory[nname] = quan
 
     def compute_cost(self, quan):
-        quantity= Stall.cost * quan 
+        quantity= self.cost * quan 
         return quantity
 
     def __str__(self):
-        return "Hello, we are" + self.name1 + ". This is the current menu" + self.inventory + " We charge $" + self.cost + "per item. We have"+ self.earnings + "in total."
+        return "Hello, we are" + self.name + ". This is the current menu" + self.inventory + " We charge $" + self.cost + "per item. We have"+ self.earnings + "in total."
 
 
 class TestAllMethods(unittest.TestCase):
@@ -185,8 +184,6 @@ class TestAllMethods(unittest.TestCase):
 	# Check that the stall can properly see when it is empty
     def test_has_item(self):
         # Set up to run test cases
-        
-
         # Test to see if has_item returns True when a stall has enough items left
         self.assertEqual(self.f3.has_item('Taco', 2), True )
         # Please follow the instructions below to create three different kinds of test cases 
@@ -215,19 +212,13 @@ class TestAllMethods(unittest.TestCase):
 ### Write main function
 def main():
     #Create different objects 
-    inventory1 = dict()
-    inventory1['cookies']= 8
-    inventory1['oranges'] = 6 
-    inventory1['grapes'] = 10
-
-    inventory2 = dict()
-    inventory2['cigs'] = 12
-    inventory2['chocolate'] = 2
-    inventory2['coffee'] = 21
+    
+    inventory1 = {"cookies":8, "oranges":50, "grapes":10}
+    inventory2 = {"cigs":12, "chocolate":2, "coffee":21}
 
     cust1= Customer('hosni', 500)
     cust2= Customer('chloe', 600)
-    cust3= Customer('eliana', 10)
+    cust3= Customer('dimond', 10)
 
     st1= Stall('chica', inventory1, 20)
     st2= Stall('chico', inventory2, 16)
@@ -244,7 +235,7 @@ def main():
     #case 2: the casher has the stall, but not enough ordered food or the ordered food item
     cust2.validate_order(cash2, st2, 'cigs', 50)
     #case 3: the customer does not have enough money to pay for the order: 
-    cust2.validate_order(cash2, st2, 'cigs', 50)
+    cust3.validate_order(cash2, st2, 'cigs', 50)
     #case 4: the customer successfully places an order
     cust2.validate_order(cash1, st1, 'grapes', 2)
 
