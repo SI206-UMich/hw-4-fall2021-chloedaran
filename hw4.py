@@ -35,8 +35,6 @@ class Customer:
         cashier.recieve_payment(amount)
         return amount 
 
-        amount 
-
     # The __str__ method prints the customer's information.    
     def __str__(self):
         return "Hello! My name is " + self.name + ". I have $" + str(self.wallet) + " in my payment card."
@@ -102,11 +100,11 @@ class Stall:
             self.inventory[nname] = quan
 
     def compute_cost(self, quan):
-        quantity= 
-    def __str__(self):
-        return "Hello, we are" + name + ". This is the current menu" + inventory + " We charge $" + cost + "per item. We have"+ earnings + "in total."
-        
+        quantity= Stall.cost * quan 
+        return quantity
 
+    def __str__(self):
+        return "Hello, we are" + self.name1 + ". This is the current menu" + self.inventory + " We charge $" + self.cost + "per item. We have"+ self.earnings + "in total."
 
 
 class TestAllMethods(unittest.TestCase):
@@ -187,8 +185,10 @@ class TestAllMethods(unittest.TestCase):
 	# Check that the stall can properly see when it is empty
     def test_has_item(self):
         # Set up to run test cases
+        
 
         # Test to see if has_item returns True when a stall has enough items left
+        self.assertEqual(self.f3.has_item('Taco', 2), True )
         # Please follow the instructions below to create three different kinds of test cases 
         # Test case 1: the stall does not have this food item: 
         self.assertEqual(self.f3.has_item('chips', 72), False )
@@ -232,19 +232,21 @@ def main():
     st1= Stall('chica', inventory1, 20)
     st2= Stall('chico', inventory2, 16)
 
-    cash1= Cashier('pat',[st1, st2])
+    cash1= Cashier('pat',[st1])
     cash2= Cashier('saly', [st1, st2])
+
 
     
     #Try all cases in the validate_order function
     #Below you need to have *each customer instance* try the four cases
     #case 1: the cashier does not have the stall 
-    
+    cust1.validate_order(cash1, st1, 'cookies', 2)
     #case 2: the casher has the stall, but not enough ordered food or the ordered food item
-    
+    cust2.validate_order(cash2, st2, 'cigs', 50)
     #case 3: the customer does not have enough money to pay for the order: 
-    
+    cust2.validate_order(cash2, st2, 'cigs', 50)
     #case 4: the customer successfully places an order
+    cust2.validate_order(cash1, st1, 'grapes', 2)
 
     
 
