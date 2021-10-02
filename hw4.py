@@ -65,8 +65,8 @@ class Cashier:
 	# The stall processes the order
 	# Function returns cost of the order, using compute_cost method
     def place_order(self, stall, item, quantity):
-        stall.process_order(item, quantity)
-        return Stall.compute_cost(quantity) 
+        stall.process_order(self, item, quantity)
+        return stall.compute_cost(self, quantity) 
     
     # string function.
     def __str__(self):
@@ -86,21 +86,21 @@ class Stall:
             self.earnings += (name1 * quan)
             self.inventory[name1] -=quan
         
-    def has_item(self, name, quan):
-     if self.inventory[name] >= quan:
+    def has_item(self, name1, quan):
+     if self.inventory[name1] >= quan:
          return True
      else:
         return False
 
-    def stock_up(self, nname, quan):
-        if nname in self.inventory.keys():
-            self.inventory[nname] += quan
+    def stock_up(self, name1, quan):
+        if name1 in self.inventory.keys():
+            self.inventory[name1] += quan
         else:
-            self.inventory[nname] = quan
+            self.inventory[name1] = quan
 
     def compute_cost(self, quan):
-        quantity= self.cost * quan 
-        return quantity
+        quan= self.cost * quan 
+        return quan
 
     def __str__(self):
         return "Hello, we are" + self.name + ". This is the current menu" + self.inventory + " We charge $" + self.cost + "per item. We have"+ self.earnings + "in total."
@@ -231,13 +231,13 @@ def main():
     #Try all cases in the validate_order function
     #Below you need to have *each customer instance* try the four cases
     #case 1: the cashier does not have the stall 
-    cust1.validate_order(cash1, st1, 'cookies', 2)
+    cust1.validate_order(cash1, st1, "cookies", 2)
     #case 2: the casher has the stall, but not enough ordered food or the ordered food item
-    cust2.validate_order(cash2, st2, 'cigs', 50)
+    cust2.validate_order(cash2, st2, "cigs", 50)
     #case 3: the customer does not have enough money to pay for the order: 
-    cust3.validate_order(cash2, st2, 'cigs', 50)
+    cust3.validate_order(cash2, st2, "cigs", 50)
     #case 4: the customer successfully places an order
-    cust2.validate_order(cash1, st1, 'grapes', 2)
+    cust2.validate_order(cash1, st1, "grapes", 2)
 
     
 
